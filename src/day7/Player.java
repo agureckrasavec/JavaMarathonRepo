@@ -41,18 +41,16 @@ public class Player {
     }
 
     public static void run(Player player) {
-        if (player.stamina > MIN_STAMINA) {
-            if (player.stamina > MIN_STAMINA) {
-                player.stamina--;
-                System.out.println("Игрок №" + player.id + " бежит, Его выносливость: " + player.getStamina());
-            }
-            if (player.stamina == MIN_STAMINA) {
-                countPlayers--;
-                System.out.println("Игрок №" + player.id + " устал и покидает поле");
-            }
+        if (player.stamina - 1 == 0) {
+            player.stamina--;
+            countPlayers--;
+            System.out.println("Игрок №" + player.id + " устал и покидает поле");
         }
-        else {
+        else if (player.stamina == MIN_STAMINA)
             System.out.println("Игрок №" + player.id + " покинул поле");
+        else {
+            player.stamina--;
+            System.out.println("Игрок №" + player.id + " бежит, Его выносливость: " + player.stamina);
         }
     }
 

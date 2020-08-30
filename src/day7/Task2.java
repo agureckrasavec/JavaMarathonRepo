@@ -20,8 +20,9 @@ public class Task2 {
                 break;
             }
         }
-
         Player.info();
+        Player.run(player1);
+        Player.run(player1);
         Player.run(player1);
         Player.info();
         System.out.println("Выносливость игрока №1: " + player1.getStamina());
