@@ -12,15 +12,18 @@ public class Task2 {
         Player player8 = new Player(8);
 
 
-        System.out.println("Игроков на поле: " + Player.countPlayers);
+        System.out.println("Игроков на поле: " + Player.getCountPlayers());
 
         while (true) {
             Player.run(player1);
-            if (player1.stamina == Player.MIN_STAMINA) {
+            if (player1.getStamina() == Player.getMinStamina()) {
                 break;
             }
         }
 
         Player.info();
+        Player.run(player1);
+        Player.info();
+        System.out.println("Выносливость игрока №1: " + player1.getStamina());
     }
 }

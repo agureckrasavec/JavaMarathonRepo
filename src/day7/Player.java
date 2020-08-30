@@ -3,12 +3,28 @@ package day7;
 import java.util.Random;
 
 public class Player {
-    public static final int MAX_STAMINA = 100;
-    public static final int MIN_STAMINA = 0;
-    public static final int MAX_COUNT_PLAYERS = 6;
-    static int countPlayers;
-    int id;
-    int stamina;
+    private static final int MAX_STAMINA = 100;
+    private static final int MIN_STAMINA = 0;
+    private static final int MAX_COUNT_PLAYERS = 6;
+    private static int countPlayers;
+    private int id;
+    private int stamina;
+
+    public static int getMaxStamina() {
+        return MAX_STAMINA;
+    }
+
+    public static int getMinStamina() {
+        return MIN_STAMINA;
+    }
+
+    public static int getMaxCountPlayers() {
+        return MAX_COUNT_PLAYERS;
+    }
+
+    public static int getCountPlayers() {
+        return countPlayers;
+    }
 
     public int getStamina() {
         return stamina;
@@ -25,11 +41,18 @@ public class Player {
     }
 
     public static void run(Player player) {
-            player.stamina--;
-            System.out.println("Игрок №" + player.id + " бежит, Его выносливость: " + player.getStamina());
-        if (player.stamina == MIN_STAMINA) {
-            countPlayers--;
-            System.out.println("Игрок № " + player.id + " устал и покидает поле");
+        if (player.stamina > MIN_STAMINA) {
+            if (player.stamina > MIN_STAMINA) {
+                player.stamina--;
+                System.out.println("Игрок №" + player.id + " бежит, Его выносливость: " + player.getStamina());
+            }
+            if (player.stamina == MIN_STAMINA) {
+                countPlayers--;
+                System.out.println("Игрок №" + player.id + " устал и покидает поле");
+            }
+        }
+        else {
+            System.out.println("Игрок №" + player.id + " покинул поле");
         }
     }
 
