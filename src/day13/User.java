@@ -32,8 +32,8 @@ public class User {
     }
     public boolean isSubscribed(User user) {
         boolean b = false;
-        for (int i = 0; i < user.subscriptions.size(); i++) {
-            if (user.subscriptions.get(i).equals(this))
+        for (int i = 0; i < this.subscriptions.size(); i++) {
+            if (this.subscriptions.get(i).equals(user))
                 b = true;
         }
         return b;
