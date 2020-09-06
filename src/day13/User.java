@@ -41,7 +41,7 @@ public class User {
     public boolean isFriend(User user) {
         boolean b = false;
         for (int i = 0; i < this.subscriptions.size(); i++) {
-            if (this.subscriptions.get(i).equals(user) && this.isSubscribed(user))
+            if (this.subscriptions.get(i).equals(user) && user.isSubscribed(this))
                 b = true;
             else
                 b = false;
