@@ -4,7 +4,8 @@ public enum GameCell {
     FREE_CELL("□"),
     SHIP_CELL("■"),
     SHIP_HALO("▤"),
-    PADDED_CELL("⛝");
+    PADDED_CELL("⛝"),
+    MISS_CELL("▩"); //Ячейка промаха используемая в дополнительной матрице
 
     private String img;
 
@@ -25,3 +26,4 @@ public enum GameCell {
         return img;
     }
 }
+
