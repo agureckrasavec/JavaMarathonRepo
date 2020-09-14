@@ -1,14 +1,20 @@
 package battleShip;
 
 public class GameField {
-    private final GameCell[][] gameCells; //Основная матрица использующеся для расстановки кораблей
-    private final GameCell[][] tempGameCells; //Дополнительная матрица используемая для отображения выстрела
+    public final GameCell[][] gameCells; //Основная матрица использующеся для расстановки кораблей
+    public final GameCell[][] tempGameCells; //Дополнительная матрица используемая для отображения выстрела
     private final int MAX_X = 10; //Эти константы добавил для вроде как реализации метода поиска соседних ячеек,
     private final int MIN_X = 0; //но как я понял они там не особо нужны, конкретно в моей реализации, но пусть тут побудут:)
     private final int MAX_Y = 10;
     private final int MIN_Y = 0;
-    private int shipCount;
+    public int shipCount;
     private int playerID;
+    private int twoShip1 = 0;
+    private int twoShip2 = 0;
+    private int twoShip3 = 0;
+    private int treeShip1 = 0;
+    private int treeShip2 = 0;
+    private int fourShip = 0;
 
     public GameCell[][] getGameCells() {
         return gameCells;
@@ -71,40 +77,63 @@ public class GameField {
         }
     }
 
-    //Метод добавления однопалубного корабля
-    public void cellLoad(int x, int y) {
-        haloLoad(x, y);
-        gameCells[x][y] = GameCell.SHIP_CELL;
-    }
 
-    //Метод добавления двухпалубного корабля
-    public void cellLoad(int a, int b, int x, int y) {
+    public void cellLoadTwoDeck1(int a, int b, int x, int y) {
         haloLoad(a, b);
         haloLoad(x, y);
-        gameCells[a][b] = GameCell.SHIP_CELL;
-        gameCells[x][y] = GameCell.SHIP_CELL;
+        gameCells[a][b] = GameCell.SHIP21_CELL;
+        gameCells[x][y] = GameCell.SHIP21_CELL;
+        twoShip1 = 2;
+    }
+    public void cellLoadTwoDeck2(int a, int b, int x, int y) {
+        haloLoad(a, b);
+        haloLoad(x, y);
+        gameCells[a][b] = GameCell.SHIP22_CELL;
+        gameCells[x][y] = GameCell.SHIP22_CELL;
+        twoShip2 = 2;
+    }
+    public void cellLoadTwoDeck3(int a, int b, int x, int y) {
+        haloLoad(a, b);
+        haloLoad(x, y);
+        gameCells[a][b] = GameCell.SHIP23_CELL;
+        gameCells[x][y] = GameCell.SHIP23_CELL;
+        twoShip3 = 2;
     }
 
-    //Метод добавления трехпалубного корабля
-    public void cellLoad(int a, int b, int x, int y, int i, int j) {
+    public void cellLoadTreeDeck1(int a, int b, int x, int y, int i, int j) {
         haloLoad(a, b);
         haloLoad(x, y);
         haloLoad(i, j);
-        gameCells[a][b] = GameCell.SHIP_CELL;
-        gameCells[x][y] = GameCell.SHIP_CELL;
-        gameCells[i][j] = GameCell.SHIP_CELL;
+        gameCells[a][b] = GameCell.SHIP31_CELL;
+        gameCells[x][y] = GameCell.SHIP31_CELL;
+        gameCells[i][j] = GameCell.SHIP31_CELL;
+        treeShip1 = 3;
     }
-
-    //Метод добавления четырехпалубного корабля
-    public void cellLoad(int a, int b, int x, int y, int i, int j, int k, int l) {
+    public void cellLoadTreeDeck2(int a, int b, int x, int y, int i, int j) {
+        haloLoad(a, b);
+        haloLoad(x, y);
+        haloLoad(i, j);
+        gameCells[a][b] = GameCell.SHIP32_CELL;
+        gameCells[x][y] = GameCell.SHIP32_CELL;
+        gameCells[i][j] = GameCell.SHIP32_CELL;
+        treeShip2 = 3;
+    }
+    public void cellLoadFourDeck(int a, int b, int x, int y, int i, int j, int k, int l) {
         haloLoad(a, b);
         haloLoad(x, y);
         haloLoad(i, j);
         haloLoad(k, l);
-        gameCells[a][b] = GameCell.SHIP_CELL;
+        gameCells[a][b] = GameCell.SHIP4_CELL;
+        gameCells[x][y] = GameCell.SHIP4_CELL;
+        gameCells[i][j] = GameCell.SHIP4_CELL;
+        gameCells[k][l] = GameCell.SHIP4_CELL;
+        fourShip = 4;
+    }
+
+    //Метод добавления однопалубного корабля
+    public void cellLoad(int x, int y) {
+        haloLoad(x, y);
         gameCells[x][y] = GameCell.SHIP_CELL;
-        gameCells[i][j] = GameCell.SHIP_CELL;
-        gameCells[k][l] = GameCell.SHIP_CELL;
     }
 
     // Метод проверяющий валидность двухпалубного корабля
@@ -166,54 +195,158 @@ public class GameField {
             }
         }
     }
+    //Метод проверяющий попал ли игрок по кораблю
+    public boolean isHit(int x, int y) {
+        return tempGameCells[x][y].equals(GameCell.MISS_CELL);
+    }
 
-    public boolean isMultiDecksShip(int x, int y) {
-        for (int i = x - 1; i <= x + 1; i++) {
-            for (int j = y - 1; j <= y + 1; j++) {
-                try {
-                    if (y < MIN_Y || y > MAX_Y) {
-                        continue;
-                    }
-                    if (x < MIN_X || x > MAX_X) {
-                        continue;
-                    }
-                    if (gameCells[x][y - 1].equals(GameCell.SHIP_CELL) || gameCells[x][y + 1].equals(GameCell.SHIP_CELL) || gameCells[x - 1][y].equals(GameCell.SHIP_CELL)
-                            || gameCells[x + 1][y].equals(GameCell.SHIP_CELL)) {
-                        return true;
-                    }
+    public boolean winner() {
+        int counter = 0;
+        for (int i = 0; i < gameCells.length; i++) {
+            for (int j = 0; j < gameCells[i].length; j++) {
+                if (gameCells[i][j].equals(GameCell.SHIP_CELL) || gameCells[i][j].equals(GameCell.SHIP21_CELL)
+                        || gameCells[i][j].equals(GameCell.SHIP22_CELL) || gameCells[i][j].equals(GameCell.SHIP23_CELL)
+                        || gameCells[i][j].equals(GameCell.SHIP31_CELL) || gameCells[i][j].equals(GameCell.SHIP32_CELL)
+                        || gameCells[i][j].equals(GameCell.SHIP4_CELL))
+                    counter++;
+            }
+        }
+        if (counter != 0) {
+            return true;
+        }
+        else
+            return false;
+    }
 
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    continue;
+
+    //Метод выстрела
+    public void fire(int x, int y) {
+        if (gameCells[x][y].equals(GameCell.SHIP21_CELL)) {
+            this.shipCount--;
+            twoShip1--;
+            gameCells[x][y] = GameCell.PADDED_CELL;
+            if (twoShip1 == 0) {
+                if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                    tempGameCells[x][y] = GameCell.PADDED_CELL;
+                }
+                System.out.println("Потопил");
+            } else {
+                this.shipCount--;
+                System.out.println("Попал");
+                gameCells[x][y] = GameCell.PADDED_CELL;
+                if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                    tempGameCells[x][y] = GameCell.PADDED_CELL;
                 }
             }
         }
-        return false;
-    }
 
-    //Метод проверяющий попал ли игрок по кораблю
-    public boolean isHit(int x, int y) {
-        return this.gameCells[x][y].equals(GameCell.SHIP_CELL);
-    }
-    //Метод выстрела
-    public void fire(int x, int y) {
-        if (isMultiDecksShip(x, y) && gameCells[x][y].equals(GameCell.SHIP_CELL)) {
-            gameCells[x][y] = GameCell.PADDED_CELL;
-            this.tempGameCells[x][y] = GameCell.PADDED_CELL;
+        if (gameCells[x][y].equals(GameCell.SHIP22_CELL)) {
             this.shipCount--;
-            System.out.println("Попал");
+            twoShip2--;
+            gameCells[x][y] = GameCell.PADDED_CELL;
+            if (twoShip2 == 0) {
+                if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                    tempGameCells[x][y] = GameCell.PADDED_CELL;
+                }
+                System.out.println("Потопил");
+            } else {
+                this.shipCount--;
+                System.out.println("Попал");
+                gameCells[x][y] = GameCell.PADDED_CELL;
+                if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                    tempGameCells[x][y] = GameCell.PADDED_CELL;
+                }
+            }
         }
-        else if(!isMultiDecksShip(x, y) && gameCells[x][y].equals(GameCell.SHIP_CELL)) {
-            gameCells[x][y] = GameCell.PADDED_CELL;
-            this.tempGameCells[x][y] = GameCell.PADDED_CELL;
+
+        if (gameCells[x][y].equals(GameCell.SHIP23_CELL)) {
             this.shipCount--;
+            twoShip3--;
+            gameCells[x][y] = GameCell.PADDED_CELL;
+            if (twoShip3 == 0) {
+                if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                    tempGameCells[x][y] = GameCell.PADDED_CELL;
+                }
+                System.out.println("Потопил");
+            } else {
+                this.shipCount--;
+                System.out.println("Попал");
+                gameCells[x][y] = GameCell.PADDED_CELL;
+                if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                    tempGameCells[x][y] = GameCell.PADDED_CELL;
+                }
+            }
+        }
+        if (gameCells[x][y].equals(GameCell.SHIP31_CELL)) {
+            this.shipCount--;
+            treeShip1--;
+            gameCells[x][y] = GameCell.PADDED_CELL;
+            if (treeShip1 == 0) {
+                if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                    tempGameCells[x][y] = GameCell.PADDED_CELL;
+                }
+                System.out.println("Потопил");
+            } else {
+                this.shipCount--;
+                System.out.println("Попал");
+                gameCells[x][y] = GameCell.PADDED_CELL;
+                if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                    tempGameCells[x][y] = GameCell.PADDED_CELL;
+                }
+            }
+        }
+
+        if (gameCells[x][y].equals(GameCell.SHIP32_CELL)) {
+            this.shipCount--;
+            treeShip2--;
+            gameCells[x][y] = GameCell.PADDED_CELL;
+            if (treeShip2 == 0) {
+                if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                    tempGameCells[x][y] = GameCell.PADDED_CELL;
+                }
+                System.out.println("Потопил");
+            } else {
+                this.shipCount--;
+                System.out.println("Попал");
+                gameCells[x][y] = GameCell.PADDED_CELL;
+                if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                    tempGameCells[x][y] = GameCell.PADDED_CELL;
+                }
+            }
+        }
+
+        if (gameCells[x][y].equals(GameCell.SHIP4_CELL)) {
+            this.shipCount--;
+            fourShip--;
+            gameCells[x][y] = GameCell.PADDED_CELL;
+            if (fourShip == 0) {
+                if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                    tempGameCells[x][y] = GameCell.PADDED_CELL;
+                }
+                System.out.println("Потопил");
+            } else {
+                this.shipCount--;
+                System.out.println("Попал");
+                gameCells[x][y] = GameCell.PADDED_CELL;
+                if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                    tempGameCells[x][y] = GameCell.PADDED_CELL;
+                }
+            }
+        }
+        if (gameCells[x][y].equals(GameCell.SHIP_CELL)) {
+            this.shipCount--;
+            gameCells[x][y] = GameCell.PADDED_CELL;
+            if (tempGameCells[x][y].equals(GameCell.FREE_CELL)) {
+                tempGameCells[x][y] = GameCell.PADDED_CELL;
+            }
             System.out.println("Потопил");
         }
-        else if(gameCells[x][y].equals(GameCell.FREE_CELL) || gameCells[x][y].equals(GameCell.PADDED_CELL)
-                || gameCells[x][y].equals(GameCell.MISS_CELL) || gameCells[x][y].equals(GameCell.SHIP_HALO)) {
-            this.tempGameCells[x][y] = GameCell.MISS_CELL;
+        if (gameCells[x][y].equals(GameCell.FREE_CELL) || gameCells[x][y].equals(GameCell.SHIP_HALO)) {
             System.out.println("Мимо");
+            if (tempGameCells[x][y].equals(GameCell.FREE_CELL))
+                tempGameCells[x][y] = GameCell.MISS_CELL;
         }
-
     }
-
 }
+
+

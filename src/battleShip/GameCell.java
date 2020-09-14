@@ -3,6 +3,12 @@ package battleShip;
 public enum GameCell {
     FREE_CELL("□"),
     SHIP_CELL("■"),
+    SHIP21_CELL("■"),
+    SHIP22_CELL("■"),
+    SHIP23_CELL("■"),
+    SHIP31_CELL("■"),
+    SHIP32_CELL("■"),
+    SHIP4_CELL("■"),
     SHIP_HALO("▤"),
     PADDED_CELL("⛝"),
     MISS_CELL("▩"); //Ячейка промаха используемая в дополнительной матрице
