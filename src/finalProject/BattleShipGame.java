@@ -1,6 +1,6 @@
 package finalProject;
 
-import battleShip.GameField;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,15 +10,15 @@ import java.util.Random;
 public class BattleShipGame {
     private static BufferedReader rd;
     private static final Random random = new Random();
-    private static final battleShip.GameField gameField = new battleShip.GameField(1);
-    private static final battleShip.GameField gameField1 = new battleShip.GameField(2);
+    private static final GameField gameField = new GameField(1);
+    private static final GameField gameField1 = new GameField(2);
 
     public static void main(String[] args) {
         startGame();
     }
 
     //Растановка однопалубного корабля
-    public static void singleDeckShip(battleShip.GameField gameField) {
+    public static void singleDeckShip(GameField gameField) {
         rd = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Введи координаты однопалубного корабля (формат: x,y)");
         int counter = 0;
@@ -46,7 +46,7 @@ public class BattleShipGame {
         }
     }
     //Расстановка двухпалубного корабля
-    public static void doubleDeckShip(battleShip.GameField gameField) throws NullPointerException {
+    public static void doubleDeckShip(GameField gameField) throws NullPointerException {
         rd = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Введи координаты двухпалубного корабля (формат: x,y;x,y)");
         gameField.showGameField();
@@ -123,7 +123,7 @@ public class BattleShipGame {
 
     }
     //Расстановка трехпалубного корабля
-    public static void tripleDeckShip(battleShip.GameField gameField) {
+    public static void tripleDeckShip(GameField gameField) {
         rd = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Введи координаты трехпалубного корабля (формат: x,y;x,y;x,y)");
         gameField.showGameField();
@@ -180,7 +180,7 @@ public class BattleShipGame {
         }
     }
     //Расстановка четырехпалубного корабля
-    public static void fourDeckShip(battleShip.GameField gameField) {
+    public static void fourDeckShip(GameField gameField) {
         rd = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Введи координаты четырехпалубного корабля (формат: x,y;x,y;x,y;x,y)");
         gameField.showGameField();
@@ -217,9 +217,9 @@ public class BattleShipGame {
         System.out.println("Стреляют по игроку №" + gameField.getPlayerID());
         System.out.println("Координаты выстрела (формат: x,y)");
         rd = new BufferedReader(new InputStreamReader(System.in));
-        String s = null;
-        try {
-            while(true) {
+        while(true) {
+            String s = null;
+            try {
                 s = rd.readLine();
                 String[] arr = s.split(",");
                 gameField.fire(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]));
@@ -227,13 +227,13 @@ public class BattleShipGame {
                 gameField.shipCount--;
                 if (gameField.isHit(Integer.parseInt(arr[0]), Integer.parseInt(arr[1])) || !gameField.winner())
                     break;
+            } catch (IOException e) {
+                System.out.println("Неверный формат ввода");
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Вы вышли за пределы игрового поля");
+            } catch (NumberFormatException e) {
+                System.out.println("Пустая строка, либо неверный формат ввода");
             }
-        } catch (IOException e) {
-            System.out.println("Неверный формат ввода");
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Вы вышли за пределы игрового поля");
-        } catch (NumberFormatException e) {
-            System.out.println("Вы ничего не ввели");
         }
     }
 
@@ -290,8 +290,6 @@ public class BattleShipGame {
                 for (int i = 0; i < 50; i++) {
                     System.out.println();
                 }
-                System.out.println(gameField.shipCount);
-                System.out.println(gameField1.shipCount);
                 fire(gameField1);
 
             }
